@@ -4,6 +4,7 @@ import {  useState } from 'react';
 import "../styles/allTasks.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewTask,  removeTask,  updateExistingTask } from '../redux/tasksSlice';
+import Loader from './Loader';
 
 const AllTask = ({modalWork,initialRef,finalRef}) => {
   const[task,setTask]=useState({
@@ -108,12 +109,16 @@ const handleDeleteTask = (id)=>{
     })
 }
 
+
+if (loading) {
+  return <Loader/>;
+}
   
 
   return (
     <div className='allTasks'>
        <Button className='add-task-btn' rightIcon={<AddIcon />} colorScheme='teal' variant='outline' onClick={modalWork.onOpen}>
-      Add task to list
+      Add Task Into List
        </Button>
        {/* modal pop-up  */}
     <Modal

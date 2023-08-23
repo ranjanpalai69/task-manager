@@ -3,7 +3,9 @@ import "../styles/notFound.css";
 import  image from "../assets/no-data-img.png"
 
 import {  useState } from 'react';
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
+import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { createNewTask } from '../redux/tasksSlice';
 // import { addTask } from '../redux/actions/task.actions';
 
 
@@ -11,51 +13,62 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
 
     const toast = useToast();
     const dispatch = useDispatch();
+    const authHeaders = useSelector((state) => state.auth.headers);
+    const[task,setTask]=useState({
+    
+      title:"",
+      description:"",
+      status:"PENDING",
+    });
 
-//    const[task,setTask]=useState({
-//    id:Math.random()+Date.now().toString(),
-//    title:"",
-//    description:"",
-//    status:"To Do"
-//  })
 
+    const handleChange=(event)=>{
+      setTask({...task,[event.target.name]:event.target.value})
+   }
 
-//  const handleChange=(event)=>{
-//      setTask({...task,[event.target.name]:event.target.value})
-//   }
+  
+ const handleAddTask=(task)=>{
+  if(task.title==="" || task.description==="" ){
+    return toast({
+        title: 'Error Occured',
+        description: "Please Fill All Fields",
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+  }
+  
 
-  // const handleAddTask=(task)=>{
-  //     if(task.title==="" || task.description==="" ){
-  //       return toast({
-  //           title: 'Error Occured',
-  //           description: "Please Fill All Fields",
-  //           status: 'error',
-  //           duration: 2000,
-  //           isClosable: true,
-  //         })
-  //     }
-  //   //  dispatch(addTask(task));
-     
-  //    modalWork.onClose();
+  dispatch(createNewTask({ ...task }, authHeaders));
+ 
+  modalWork.onClose();
 
-  //    return toast({
-  //       title: 'Success',
-  //       description: "Task Added..",
-  //       status: 'success',
-  //       duration: 2000,
-  //       isClosable: true,
-  //     })
-      
-  // }
+ return toast({
+    title: 'Success',
+    description: "Task Added..",
+    status: 'success',
+    duration: 2000,
+    isClosable: true,
+  })
+  
+}
 
 
   return (
-    <div className="notFound">
+    <div className="no-data-container">
       
-      <Heading as="h2" color={"#ff5697"}>Oops ! No Task found 🤒</Heading>
-      <img src={image} alt="not-found" />
-      {/* <button onClick={modalWork.onOpen}>Add Task</button> */}
-      {/* <Modal
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9Z0nNcwPrE1JRCOYl5Zody3mkXvygbCuV1w&usqp=CAU"
+          alt="Data Not Found"
+          className="not-found-image"
+        />
+      
+      <h1 className="not-found-header">Data Not Found</h1>
+      <Button rightIcon={<ArrowForwardIcon />} colorScheme="blue" variant='outline' alignItems={"center"} onClick={modalWork.onOpen}>
+    Add First List
+  </Button>
+      
+    <Modal
                 initialFocusRef={initialRef}
                 finalFocusRef={finalRef}
                 isOpen={modalWork.isOpen}
@@ -64,7 +77,7 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
               >
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>Enter Your Details</ModalHeader>
+                  <ModalHeader>Enter Task Details</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody pb={6}>
                     <FormControl isRequired >
@@ -97,21 +110,21 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
                         placeholder="select status of task"
                         onChange={handleChange}
                       >
-                        <option value="To Do">To Do</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="IN PROGRESS">IN PROGRESS</option>
+                        <option value="COMPLETED">COMPLETED</option>
                       </Select>
                     </FormControl>
                   </ModalBody>
 
                   <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={()=>handleAddTask(task)} >
+                    <Button colorScheme="blue" mr={3}  onClick={()=>handleAddTask(task)}>
                       Save
                     </Button>
                     <Button onClick={modalWork.onClose}>Cancel</Button>
                   </ModalFooter>
                 </ModalContent>
-              </Modal> */}
+              </Modal>
     </div>
   )
 }
