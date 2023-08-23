@@ -1,9 +1,9 @@
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Badge, Button, FormControl, FormLabel, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useToast } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import {  useState } from 'react';
 import "../styles/allTasks.css"
 import { useDispatch, useSelector } from 'react-redux';
-import { createNewTask } from '../redux/tasksSlice';
+import { createNewTask,  removeTask,  updateExistingTask } from '../redux/tasksSlice';
 
 const AllTask = ({modalWork,initialRef,finalRef}) => {
   const[task,setTask]=useState({
@@ -12,6 +12,16 @@ const AllTask = ({modalWork,initialRef,finalRef}) => {
     description:"",
     status:"PENDING",
   });
+
+  const[editedTask,setEditedTask]=useState(
+    {
+        _id:"",
+        title:"",
+        description:"",
+        status:"PENDING"
+      }
+ )
+
   const toast = useToast();
   const dispatch = useDispatch();
 
@@ -24,7 +34,19 @@ const AllTask = ({modalWork,initialRef,finalRef}) => {
     setTask({...task,[event.target.name]:event.target.value})
  }
 
- //  dispatching addtask action 
+ const editHandleChange=(event)=>{
+    setEditedTask({...editedTask,[event.target.name]:event.target.value})
+ }
+
+ const handleEditTask=(id)=>{
+
+  const result = tasks.find((task)=>task._id === id);
+  
+  setEditedTask(result);
+     
+  }
+
+ //  dispatching createNewTask action 
 
  const handleAddTask=(task)=>{
   if(task.title==="" || task.description==="" ){
@@ -36,6 +58,7 @@ const AllTask = ({modalWork,initialRef,finalRef}) => {
         isClosable: true,
       })
   }
+  
 
   dispatch(createNewTask({ ...task }, authHeaders));
  
@@ -51,7 +74,40 @@ const AllTask = ({modalWork,initialRef,finalRef}) => {
   
 }
 
-   
+
+const handleUpdateTask = async (editedTask) => {
+  try {
+    await dispatch(updateExistingTask({ id: editedTask._id, data: editedTask }, authHeaders));
+    setEditedTask({
+      _id: "",
+      title: "",
+      description: "",
+      status: "PENDING"
+    });
+    toast({
+      title: 'Changes Saved..',
+      description: 'Task Details Updated..',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    });
+  } catch (error) {
+    console.error('Error updating task:', error);
+    // Handle error state here if needed
+  }
+};
+
+const handleDeleteTask = (id)=>{
+  dispatch(removeTask( id , authHeaders));
+  return toast({
+      title: 'Deleted',
+      description: "Task Deleted From List",
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+}
+
   
 
   return (
@@ -121,7 +177,14 @@ const AllTask = ({modalWork,initialRef,finalRef}) => {
        <div className='task-container'>
      {
       tasks?.map((task)=>{
-        return <div key={task.id} className='singleTask'>
+        return <div key={task.id} className='singleTask' style={
+          task.status === "COMPLETED"
+            ? {
+                backgroundImage:
+                  "linear-gradient(to bottom, #7ef4e4, #83f3e3, #88f2e1, #8df1e0, #91f0df)",
+              }
+            : null
+        }>
                   <Text className="task-title" fontWeight='bold'>
                  {task.title} &nbsp;
                   {
@@ -142,20 +205,82 @@ const AllTask = ({modalWork,initialRef,finalRef}) => {
                     colorScheme='cyan'
                     aria-label='Edit task'
                    icon={<EditIcon />}
-                  //  onClick={()=>handleEditTask(task.id)}
+                   onClick={()=>handleEditTask(task._id)}
 />
                   <IconButton
                      variant='outline'
                      colorScheme='red'
                     aria-label='Delete task'
                     icon={<DeleteIcon />}
-                    // onClick={()=>handleDeleteTask(task.id)}
+                    onClick={()=>handleDeleteTask(task._id)}
                             />
                   </div>
             </div>
       })
      }
    </div>
+   <Modal
+                initialFocusRef={initialRef}
+                finalFocusRef={finalRef}
+                isOpen={editedTask._id || editedTask.title ?true:false}
+                onClose={modalWork.onClose}
+                isCentered={true}
+              >
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Edit Your Task</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody pb={6}>
+                    <FormControl isRequired >
+                      <FormLabel>Title</FormLabel>
+                      <Input name="title" value={editedTask.title} 
+                        
+                        ref={initialRef}
+                        
+                        placeholder="Enter Title"
+                        onChange={editHandleChange}
+                       
+                      />
+                    </FormControl>
+
+                    <FormControl mt={4} isRequired >
+                      <FormLabel>description</FormLabel>
+                      <Input 
+                        name="description" value={editedTask.description}
+                        
+                        placeholder="Enter description"
+                        onChange={editHandleChange}
+                        
+                      />
+                    </FormControl>
+                    <FormControl mt={4}>
+                      <FormLabel>Choose an option:</FormLabel>
+                      <Select
+                        
+                       name='status' value={editedTask.status}
+                        placeholder="change status of task"
+                        onChange={editHandleChange}
+                      >
+                        <option value="PENDING">PENDING</option>
+                        <option value="IN PROGRESS">IN PROGRESS</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                      </Select>
+                    </FormControl>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={()=>handleUpdateTask(editedTask)} >
+                      Save Changes
+                    </Button>
+                    <Button onClick={()=>setEditedTask({
+                                  title:"",
+                                  description:"",
+                                  status:"PENDING"
+
+                    })}>Cancel</Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
     </div>
   )
 }
