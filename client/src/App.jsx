@@ -1,11 +1,12 @@
 
+import AllRoutes from './Routes/AllRoutes';
 
 function App() {
 
 
   return (
     <>
-      <h1>Task Management App</h1>
+      <AllRoutes/>
     </>
   )
 }
