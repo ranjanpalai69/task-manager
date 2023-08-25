@@ -9,7 +9,7 @@ const initialState = {
 
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (_, thunkAPI) => {
   try {
-    const response = await axios.get('http://localhost:8080/task', {
+    const response = await axios.get('https://task-manager.cyclic.cloud/task', {
       headers: thunkAPI.getState().auth.headers,
     });
     return response.data;
@@ -20,7 +20,7 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (_, thunkAP
 
 export const createNewTask = createAsyncThunk('tasks/createTask', async (taskData, thunkAPI) => {
   try {
-    const response = await axios.post('http://localhost:8080/task/create', taskData, {
+    const response = await axios.post('https://task-manager.cyclic.cloud/task/create', taskData, {
       headers: thunkAPI.getState().auth.headers,
     });
     return response.data;
@@ -34,7 +34,7 @@ export const updateExistingTask = createAsyncThunk(
   async (taskData, thunkAPI) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/task/${taskData.id}`, // Assuming you have a suitable API endpoint for updating a task
+        `https://task-manager.cyclic.cloud/task/${taskData.id}`, // Assuming you have a suitable API endpoint for updating a task
         taskData.data,
         {
           headers: thunkAPI.getState().auth.headers,
@@ -51,7 +51,7 @@ export const removeTask = createAsyncThunk(
   'tasks/deleteTask',
   async (taskId, thunkAPI) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/task/${taskId}`, {
+      const response = await axios.delete(`https://task-manager.cyclic.cloud/task/${taskId}`, {
         headers: thunkAPI.getState().auth.headers,
       });
       return response.data;

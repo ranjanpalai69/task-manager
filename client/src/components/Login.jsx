@@ -29,7 +29,7 @@ const LoginForm = () => {
 
     try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8080/user/login`, {
+        const response = await fetch(`https://task-manager.cyclic.cloud/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

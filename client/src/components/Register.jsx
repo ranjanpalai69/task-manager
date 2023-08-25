@@ -16,7 +16,7 @@ const RegisterForm = () => {
     
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:8080/user/register`, {
+            const response = await fetch(`https://task-manager.cyclic.cloud/user/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
