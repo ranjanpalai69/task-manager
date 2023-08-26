@@ -1,12 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import tasksReducer from './tasksSlice';
-import authReducer from './authSlice';
+// store.js
+import { legacy_createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk'; // Install with: npm install redux-thunk
+import rootReducer from './reducers';
 
-const store = configureStore({
-  reducer: {
-    tasks: tasksReducer,
-    auth: authReducer,
-  },
-});
+
+const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
 
 export default store;

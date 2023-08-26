@@ -7,7 +7,6 @@ export const AuthContextProvider=({children})=>{
      
     const[authState,setAuthState]=useState({
         token:null,
-        isAuth:false,
         isRegistered:false
     })
     

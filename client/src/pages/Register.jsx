@@ -1,10 +1,12 @@
 import { useContext, useState } from "react";
 import "../styles/auth.css"
 import { AuthContext } from "../context/AuthContextProvider";
+import { useNavigate } from "react-router-dom";
 import { useToast } from '@chakra-ui/react'
-const RegisterForm = () => {
+const Register = () => {
     const [loading,setLoading]=useState(false);
     const toast=useToast();
+    const navigate=useNavigate();
     const {authState,setAuthState} = useContext(AuthContext);
     const[user,setUser]=useState({
         username:"",
@@ -35,6 +37,7 @@ const RegisterForm = () => {
                     isClosable: true,
                   });
                   setAuthState({...authState,isRegistered:true});
+                  navigate("/login");
             }else{
               toast({
                 title: 'Error Occured',
@@ -65,6 +68,11 @@ const RegisterForm = () => {
         e.preventDefault();
         signup(user)
     }
+
+    const alreadyLogin=()=>{
+      setAuthState({...authState,isRegistered:true});
+      navigate("/login")
+    }
     
    
   return (
@@ -84,7 +92,7 @@ const RegisterForm = () => {
           <input type="password" placeholder="Enter your password" name="password" onChange={handleChange}/>
         </div>
         <div className="row">
-          <div>Already have an account &nbsp; <span style={{"fontSize":"large","color":"teal",borderBottom:"2px solid teal"}} onClick={()=>setAuthState({...authState,isRegistered:true})}>sign in</span></div>
+          <div>Already have an account &nbsp; <span style={{"fontSize":"large","color":"teal",borderBottom:"2px solid teal"}} onClick={alreadyLogin}>sign in</span></div>
           
         </div>
         <div  className="row button">
@@ -96,4 +104,7 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default Register;
+
+
+

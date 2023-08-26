@@ -3,17 +3,17 @@ import "../styles/notFound.css";
 import  image from "../assets/no-data-img.png"
 
 import {  useState } from 'react';
-import {useDispatch, useSelector} from "react-redux"
+
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { createNewTask } from '../redux/tasksSlice';
+import { addNewTask } from '../redux/taskActions';
+import { useDispatch } from 'react-redux';
+
 // import { addTask } from '../redux/actions/task.actions';
 
 
 const DataNotFound = ({modalWork,initialRef,finalRef}) => {
-
-    const toast = useToast();
     const dispatch = useDispatch();
-    const authHeaders = useSelector((state) => state.auth.headers);
+    const toast = useToast();
     const[task,setTask]=useState({
     
       title:"",
@@ -27,31 +27,36 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
    }
 
   
- const handleAddTask=(task)=>{
-  if(task.title==="" || task.description==="" ){
+   const handleAddTask=async (task)=>{
+    if(task.title==="" || task.description==="" ){
+      return toast({
+          title: 'Error Occured',
+          description: "Please Fill All Fields",
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        })
+    }
+    
+    dispatch(addNewTask(task));
+   
+    modalWork.onClose();
+    
+    setTask({
+      title:"",
+      description:"",
+      status:"PENDING",
+    })
+  
     return toast({
-        title: 'Error Occured',
-        description: "Please Fill All Fields",
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-      })
+      title: 'Success',
+      description: "Task Added..",
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
+    
   }
-  
-
-  dispatch(createNewTask({ ...task }, authHeaders));
- 
-  modalWork.onClose();
-
- return toast({
-    title: 'Success',
-    description: "Task Added..",
-    status: 'success',
-    duration: 2000,
-    isClosable: true,
-  })
-  
-}
 
 
   return (
@@ -118,7 +123,7 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
                   </ModalBody>
 
                   <ModalFooter>
-                    <Button colorScheme="blue" mr={3}  onClick={()=>handleAddTask(task)}>
+                    <Button colorScheme="blue" mr={3} onClick={()=>handleAddTask(task)}>
                       Save
                     </Button>
                     <Button onClick={modalWork.onClose}>Cancel</Button>

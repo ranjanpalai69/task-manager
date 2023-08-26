@@ -5,7 +5,7 @@ import { useToast } from '@chakra-ui/react'
 import {useNavigate} from "react-router-dom"
 
 
-const LoginForm = () => {
+const Login = () => {
   const [loading,setLoading]=useState(false);
     const toast=useToast();
     const {authState,setAuthState} = useContext(AuthContext);
@@ -48,7 +48,7 @@ const LoginForm = () => {
                 isClosable: true,
               });
               localStorage.setItem("authUser",JSON.stringify({token:data.token,user:data.user}));
-              setAuthState({...authState,isAuth:true,token:data.token});
+              setAuthState({...authState,token:data.token});
               navigate("/")
         }else{
           toast({
@@ -74,6 +74,11 @@ const LoginForm = () => {
     }
 };
 
+const notHaveAccount=()=>{
+  setAuthState({...authState,token:null,isRegistered:false});
+  navigate("/register");
+}
+
   return (
     <form className="loginform" onSubmit={handleSubmit}>
       <h2 className="headerTitle">Login</h2>
@@ -87,7 +92,7 @@ const LoginForm = () => {
           <input type="password" placeholder="Enter your password" name="password" onChange={handleChange}/>
         </div>
         <div className="row">
-        <div> Don't have an account &nbsp; <span style={{"fontSize":"large","color":"teal",borderBottom:"2px solid teal"}} onClick={()=>setAuthState({...authState,isRegistered:false})}>Register</span></div>
+        <div> Don't have an account &nbsp; <span style={{"fontSize":"large","color":"teal",borderBottom:"2px solid teal"}} onClick={notHaveAccount}>Register</span></div>
         </div>
         <div  className="row button">
          
@@ -99,4 +104,6 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Login;
+
+
