@@ -7,7 +7,6 @@ const Register = () => {
     const [loading,setLoading]=useState(false);
     const toast=useToast();
     const navigate=useNavigate();
-    const {authState,setAuthState} = useContext(AuthContext);
     const[user,setUser]=useState({
         username:"",
         password:"",
@@ -36,7 +35,6 @@ const Register = () => {
                     duration: 4000,
                     isClosable: true,
                   });
-                  setAuthState({...authState,isRegistered:true});
                   navigate("/login");
             }else{
               toast({
@@ -70,7 +68,6 @@ const Register = () => {
     }
 
     const alreadyLogin=()=>{
-      setAuthState({...authState,isRegistered:true});
       navigate("/login")
     }
     

@@ -1,14 +1,16 @@
-import { headers } from "../api";
+
 
 // taskActions.js
-export const fetchTasks = () => {
+export const fetchTasks = (token) => {
     return async (dispatch) => {
       dispatch({ type: 'FETCH_TASKS_REQUEST' });
-  
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task`, {
           method: 'GET',
-          headers: headers,
+          headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
         let data = await res.json();
         dispatch({ type: 'FETCH_TASKS_SUCCESS', payload: data });
@@ -18,13 +20,16 @@ export const fetchTasks = () => {
     };
   };
   
-  export const addNewTask = (task) => {
+  export const addNewTask = (task,token) => {
     return async (dispatch) => {
       dispatch({ type: 'ADD_TASK_REQUEST' });
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task/create`, {
           method: 'POST',
-          headers: headers,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
           body: JSON.stringify(task),
         });
         let data = await res.json();
@@ -35,13 +40,16 @@ export const fetchTasks = () => {
     };
   };
   
-  export const removeTask = (id) => {
+  export const removeTask = (id,token) => {
     return async (dispatch) => {
       dispatch({ type: 'REMOVE_TASK_REQUEST'});
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task/${id}`, {
           method: 'DELETE',
-          headers: headers,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
         });
         let data = await res.json();
         dispatch({ type: 'REMOVE_TASK_SUCCESS', payload: id });
@@ -51,18 +59,19 @@ export const fetchTasks = () => {
     };
   };
   
-  export const editTask = (id, editedTask) => {
+  export const editTask = (id, editedTask,token) => {
     return async (dispatch) => {
       dispatch({ type: 'EDIT_TASK_REQUEST'});
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task/${id}`, {
           method: 'PUT',
-          headers: headers,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
           body: JSON.stringify(editedTask),
         });
         let data = await res.json();
-        console.log("edit",data);
-        console.log(editedTask);
         dispatch({ type: 'EDIT_TASK_SUCCESS', payload: data.data });
       } catch (error) {
         dispatch({ type: 'EDIT_TASK_FAILURE', payload: error.message });

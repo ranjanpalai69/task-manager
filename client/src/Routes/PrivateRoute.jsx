@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({children}) => {
-  let authuser=JSON.parse(localStorage.getItem('authUser')) || null;
-  if(!authuser) {
+  let token=JSON.parse(localStorage.getItem('token'));
+  if(!token) {
     return <Navigate to="/register" />;
   }
   else{

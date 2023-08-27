@@ -5,8 +5,9 @@ import { useToast } from '@chakra-ui/react'
 import {useNavigate} from "react-router-dom"
 
 
+
 const Login = () => {
-  const [loading,setLoading]=useState(false);
+    const [loading,setLoading]=useState(false);
     const toast=useToast();
     const {authState,setAuthState} = useContext(AuthContext);
     const navigate=useNavigate();
@@ -47,8 +48,9 @@ const Login = () => {
                 duration: 4000,
                 isClosable: true,
               });
-              localStorage.setItem("authUser",JSON.stringify({token:data.token,user:data.user}));
-              setAuthState({...authState,token:data.token});
+              localStorage.setItem("token",JSON.stringify(data.token));
+              localStorage.setItem("current_user", JSON.stringify(data.user.username));
+              setAuthState({...authState,token:data.token,current_user:data.user.username});
               navigate("/")
         }else{
           toast({
@@ -75,9 +77,9 @@ const Login = () => {
 };
 
 const notHaveAccount=()=>{
-  setAuthState({...authState,token:null,isRegistered:false});
   navigate("/register");
 }
+
 
   return (
     <form className="loginform" onSubmit={handleSubmit}>

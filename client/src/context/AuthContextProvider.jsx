@@ -6,8 +6,8 @@ export const AuthContext=createContext();
 export const AuthContextProvider=({children})=>{
      
     const[authState,setAuthState]=useState({
-        token:null,
-        isRegistered:false
+        token: JSON.parse(localStorage.getItem("token")) || "",
+        current_user:JSON.parse(localStorage.getItem("current_user")) || ""
     })
     
 

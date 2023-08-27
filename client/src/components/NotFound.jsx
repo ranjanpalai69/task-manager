@@ -2,17 +2,19 @@ import { Button, FormControl, FormLabel, Heading, Input, Modal, ModalBody, Modal
 import "../styles/notFound.css";
 import  image from "../assets/no-data-img.png"
 
-import {  useState } from 'react';
+import {  useContext, useState } from 'react';
 
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { addNewTask } from '../redux/taskActions';
 import { useDispatch } from 'react-redux';
+import { AuthContext } from '../context/AuthContextProvider';
 
 // import { addTask } from '../redux/actions/task.actions';
 
 
 const DataNotFound = ({modalWork,initialRef,finalRef}) => {
     const dispatch = useDispatch();
+    const {authState}=useContext(AuthContext);
     const toast = useToast();
     const[task,setTask]=useState({
     
@@ -38,7 +40,7 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
         })
     }
     
-    dispatch(addNewTask(task));
+    dispatch(addNewTask(task,authState.token));
    
     modalWork.onClose();
     
@@ -57,7 +59,7 @@ const DataNotFound = ({modalWork,initialRef,finalRef}) => {
     })
     
   }
-
+  
 
   return (
     <div className="no-data-container">

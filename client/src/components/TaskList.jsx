@@ -1,9 +1,10 @@
 import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Badge, Button, FormControl, FormLabel, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useDisclosure, useToast } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import "../styles/allTasks.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewTask, editTask, fetchTasks, removeTask } from '../redux/taskActions';
+import { AuthContext } from '../context/AuthContextProvider';
 
 
 
@@ -11,7 +12,7 @@ const TaskList = ({modalWork,initialRef,finalRef}) => {
 
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks.tasks);
-
+  const {authState}=useContext(AuthContext)
   const modal = useDisclosure();
   const firstRef = useRef(null);
   const lastRef = useRef(null);
@@ -65,7 +66,7 @@ const TaskList = ({modalWork,initialRef,finalRef}) => {
       })
   }
   
-  dispatch(addNewTask(task));
+  dispatch(addNewTask(task,authState.token));
  
   modalWork.onClose();
   
@@ -87,7 +88,7 @@ const TaskList = ({modalWork,initialRef,finalRef}) => {
 
 
 const handleUpdateTask =  (id,editedTask) => {
-    dispatch(editTask(id, editedTask));
+    dispatch(editTask(id, editedTask,authState.token));
     modal.onClose();
     toast({
       title: 'Changes Saved..',
@@ -102,7 +103,7 @@ const handleUpdateTask =  (id,editedTask) => {
 // dispatching removeTask action
 
 const handleDeleteTask = (id)=>{
-  dispatch(removeTask(id));
+  dispatch(removeTask(id,authState.token));
   return toast({
       title: 'Deleted',
       description: "Task Deleted From List",
@@ -112,7 +113,7 @@ const handleDeleteTask = (id)=>{
     })
 }
 
-//  console.log("editedTask",editedTask)
+
 
   return (
     <div className='allTasks'>

@@ -1,4 +1,4 @@
-import {  useEffect, useRef } from "react"
+import {  useContext, useEffect, useRef } from "react"
 import { Heading, useDisclosure } from "@chakra-ui/react";
 import TaskList from "../components/TaskList";
 import DataNotFound from "../components/NotFound";
@@ -6,10 +6,11 @@ import { CalendarIcon } from "@chakra-ui/icons";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks } from "../redux/taskActions";
+import { AuthContext } from "../context/AuthContextProvider";
 
 
 const AllTasks = () => {
-
+  const {authState}=useContext(AuthContext)
   const modalWork = useDisclosure();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -18,7 +19,7 @@ const AllTasks = () => {
   const loading = useSelector((state) => state.tasks.loading);
   const error = useSelector((state) => state.tasks.error);
   useEffect(() => {
-    dispatch(fetchTasks());
+    dispatch(fetchTasks(authState.token));
   }, [dispatch]);
 
   if (loading) {
@@ -29,7 +30,6 @@ const AllTasks = () => {
     return <p>Error: {error}</p>;
   }
    
-  console.log("tasks",tasks);
 
   return (
         <div>
