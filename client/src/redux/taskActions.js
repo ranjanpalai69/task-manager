@@ -20,6 +20,7 @@ export const fetchTasks = () => {
   
   export const addNewTask = (task) => {
     return async (dispatch) => {
+      dispatch({ type: 'ADD_TASK_REQUEST' });
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task/create`, {
           method: 'POST',
@@ -29,13 +30,14 @@ export const fetchTasks = () => {
         let data = await res.json();
         dispatch({ type: 'ADD_TASK_SUCCESS', payload: data.data });
       } catch (error) {
-        dispatch({ type: 'TASK_ACTION_FAILURE', payload: error.message });
+        dispatch({ type: 'ADD_TASK_FAILURE', payload: error.message });
       }
     };
   };
   
   export const removeTask = (id) => {
     return async (dispatch) => {
+      dispatch({ type: 'REMOVE_TASK_REQUEST'});
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task/${id}`, {
           method: 'DELETE',
@@ -44,13 +46,14 @@ export const fetchTasks = () => {
         let data = await res.json();
         dispatch({ type: 'REMOVE_TASK_SUCCESS', payload: id });
       } catch (error) {
-        dispatch({ type: 'TASK_ACTION_FAILURE', payload: error.message });
+        dispatch({ type: 'REMOVE_TASK_FAILURE', payload: error.message });
       }
     };
   };
   
   export const editTask = (id, editedTask) => {
     return async (dispatch) => {
+      dispatch({ type: 'EDIT_TASK_REQUEST'});
       try {
         let res = await fetch(`https://task-manager.cyclic.cloud/task/${id}`, {
           method: 'PUT',
@@ -62,7 +65,7 @@ export const fetchTasks = () => {
         console.log(editedTask);
         dispatch({ type: 'EDIT_TASK_SUCCESS', payload: data.data });
       } catch (error) {
-        dispatch({ type: 'TASK_ACTION_FAILURE', payload: error.message });
+        dispatch({ type: 'EDIT_TASK_FAILURE', payload: error.message });
       }
     };
   };

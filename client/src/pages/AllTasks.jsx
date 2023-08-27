@@ -28,6 +28,8 @@ const AllTasks = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
+   
+  console.log("tasks",tasks);
 
   return (
         <div>

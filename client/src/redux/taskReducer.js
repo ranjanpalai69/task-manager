@@ -14,12 +14,22 @@ const initialState = {
         return { ...state, tasks: action.payload, loading: false, error: null };
       case 'FETCH_TASKS_FAILURE':
         return { ...state, loading: false, error: action.payload };
+      case 'ADD_TASK_REQUEST':
+        return { ...state, loading: true, error: null };
       case 'ADD_TASK_SUCCESS':
         return { ...state, tasks: [...state.tasks, action.payload], loading: false, error: null };
+      case 'ADD_TASK_FAILURE':
+        return { ...state, loading: false, error: action.payload };
+      case 'REMOVE_TASK_REQUEST':
+        return { ...state, loading: true, error: null };
       case 'REMOVE_TASK_SUCCESS':{
           const updatedTasks = state.tasks.filter(task => task._id !== action.payload);
           return { ...state, tasks: updatedTasks, loading: false, error: null };
       }
+      case 'REMOVE_TASK_FAILURE':
+        return { ...state, loading: false, error: action.payload };
+      case 'EDIT_TASK_REQUEST':
+        return { ...state, loading: true, error: null }; 
       case 'EDIT_TASK_SUCCESS':{
         const updatedTaskIndex = state.tasks.findIndex(task => task._id === action.payload._id);
            if (updatedTaskIndex !== -1) {
@@ -27,12 +37,18 @@ const initialState = {
             updatedTasks[updatedTaskIndex] = action.payload;
          return { ...state, tasks: updatedTasks, loading: false, error: null };
         }
+      
+      return state;
       }
-  return state;
-      default:
+      case 'EDIT_TASK_FAILURE':
+        return { ...state, loading: false, error: action.payload };
+
+      default:{
         return state;
     }
-  };
+  }
+
+}
   
-  export default taskReducer;
+export default taskReducer;
   
