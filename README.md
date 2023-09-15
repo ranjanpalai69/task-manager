@@ -53,7 +53,7 @@ To run this application locally, follow these steps:
    - Once the server is up and running, you can access the application locally at this URL: http://localhost:5173/.
    - Open the provided URL in any web browser to view and interact with the application.
 
-By following these steps, you can easily set up and run the e-commerce application locally on your machine.
+By following these steps, you can easily set up and run the application locally on your machine.
 
 ----
 ----
