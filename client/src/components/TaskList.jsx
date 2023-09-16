@@ -11,7 +11,7 @@ import { AuthContext } from '../context/AuthContextProvider';
 const TaskList = ({modalWork,initialRef,finalRef}) => {
 
   const dispatch = useDispatch();
-  const tasks = useSelector((state) => state.tasks.tasks);
+  const tasks = useSelector((state) => state.tasks.tasks.docs);
   const {authState}=useContext(AuthContext)
   const modal = useDisclosure();
   const firstRef = useRef(null);

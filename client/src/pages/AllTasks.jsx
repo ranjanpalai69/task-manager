@@ -15,7 +15,7 @@ const AllTasks = () => {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
   const dispatch = useDispatch();
-  const tasks = useSelector((state) => state.tasks.tasks);
+  const tasks = useSelector((state) => state.tasks.tasks.docs);
   const loading = useSelector((state) => state.tasks.loading);
   const error = useSelector((state) => state.tasks.error);
   useEffect(() => {
@@ -30,6 +30,7 @@ const AllTasks = () => {
     return <p>Error: {error}</p>;
   }
    
+
 
   return (
         <div>
